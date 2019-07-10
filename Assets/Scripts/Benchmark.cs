@@ -84,6 +84,8 @@ public class Benchmark : MonoBehaviour
             (Random.value-.5f)* spread,
             distance
             );
+        var m = b.GetComponent<Renderer>().material;
+        m.color = Color.HSVToRGB(Random.value, .5f, 1.0f );
         distance-=step;
         b.mesh = mesh;
         Profiler.EndSample();
