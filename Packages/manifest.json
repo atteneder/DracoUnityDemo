@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "com.atteneder.draco": "https://github.com/atteneder/DracoUnity.git",
     "com.unity.package-manager-ui": "2.1.2",
+    "com.atteneder.draco": "https://gitlab.com/atteneder/DracoUnity.git",
     "com.unity.modules.unitywebrequest": "1.0.0"
   }
 }
