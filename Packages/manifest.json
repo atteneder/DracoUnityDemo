@@ -1,7 +1,18 @@
 {
   "dependencies": {
-    "com.unity.package-manager-ui": "2.1.2",
     "com.atteneder.draco": "https://gitlab.com/atteneder/DracoUnity.git",
+    "com.unity.2d.sprite": "1.0.0",
+    "com.unity.2d.tilemap": "1.0.0",
+    "com.unity.ext.nunit": "1.0.0",
+    "com.unity.ide.rider": "1.1.0",
+    "com.unity.ide.vscode": "1.1.2",
+    "com.unity.package-manager-ui": "2.2.0",
+    "com.unity.test-framework": "1.0.18",
+    "com.unity.ugui": "1.0.0",
+    "com.unity.modules.animation": "1.0.0",
+    "com.unity.modules.physics": "1.0.0",
+    "com.unity.modules.physics2d": "1.0.0",
+    "com.unity.modules.ui": "1.0.0",
     "com.unity.modules.unitywebrequest": "1.0.0"
   }
 }
