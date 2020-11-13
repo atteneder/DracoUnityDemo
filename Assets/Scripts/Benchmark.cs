@@ -27,13 +27,13 @@ using System.IO;
 public class Benchmark : MonoBehaviour
 {
     [SerializeField]
-    private string filePath;
+    private string filePath = null;
 
     [SerializeField]
     private int count = 10;
 
     [SerializeField]
-    MeshFilter prefab;
+    MeshFilter prefab = null;
 
     NativeArray<byte> data;
 
