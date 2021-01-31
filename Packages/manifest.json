@@ -1,24 +1,24 @@
 {
-  "dependencies" : {
-    "com.unity.2d.sprite" : "1.0.0",
-    "com.unity.2d.tilemap" : "1.0.0",
-    "com.unity.ext.nunit" : "1.0.0",
-    "com.unity.ide.rider" : "1.1.4",
-    "com.unity.ide.vscode" : "1.2.3",
-    "com.unity.test-framework" : "1.1.18",
-    "com.unity.ugui" : "1.0.0",
-    "com.unity.modules.animation" : "1.0.0",
-    "com.unity.modules.physics" : "1.0.0",
-    "com.unity.modules.physics2d" : "1.0.0",
-    "com.unity.modules.ui" : "1.0.0",
-    "com.unity.modules.unitywebrequest" : "1.0.0",
-    "com.atteneder.draco" : "1.3.0"
+  "dependencies": {
+    "com.atteneder.draco": "1.4.0",
+    "com.unity.2d.sprite": "1.0.0",
+    "com.unity.2d.tilemap": "1.0.0",
+    "com.unity.ext.nunit": "1.0.0",
+    "com.unity.ide.rider": "1.1.4",
+    "com.unity.ide.vscode": "1.2.3",
+    "com.unity.test-framework": "1.1.18",
+    "com.unity.ugui": "1.0.0",
+    "com.unity.modules.animation": "1.0.0",
+    "com.unity.modules.physics": "1.0.0",
+    "com.unity.modules.physics2d": "1.0.0",
+    "com.unity.modules.ui": "1.0.0",
+    "com.unity.modules.unitywebrequest": "1.0.0"
   },
-  "scopedRegistries" : [
+  "scopedRegistries": [
     {
-      "name" : "OpenUPM",
-      "url" : "https://package.openupm.com",
-      "scopes" : [
+      "name": "OpenUPM",
+      "url": "https://package.openupm.com",
+      "scopes": [
         "com.atteneder"
       ]
     }
