@@ -23,6 +23,8 @@ using UnityEngine.Profiling;
 using UnityEngine.Networking;
 using Unity.Collections;
 using System.IO;
+using System.Threading.Tasks;
+using GLTFast.Utils;
 
 public class Benchmark : MonoBehaviour
 {
@@ -45,8 +47,10 @@ public class Benchmark : MonoBehaviour
     float distance = 10;
     float aspectRatio = 1.5f;
 
+    StopWatch stopwatch;
     // Start is called before the first frame update
     IEnumerator Start() {
+        stopwatch = gameObject.AddComponent<StopWatch>();
         var url = GetStreamingAssetsUrl(filePath);
         var webRequest = UnityWebRequest.Get(url);
         yield return webRequest.SendWebRequest();
@@ -63,26 +67,46 @@ public class Benchmark : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        if(data!=null &&
-        (
-            Input.GetKeyDown(KeyCode.Space)
-            || (Input.touchCount>0 && Input.GetTouch(0).phase == TouchPhase.Began)
-        )) {
-            LoadBatch();
+        if(data!=null) {
+            if (Input.GetKeyDown(KeyCode.Alpha1)) {
+                LoadBatch(1);
+            } else
+            if (Input.GetKeyDown(KeyCode.Space)
+                || (Input.touchCount>0 && Input.GetTouch(0).phase == TouchPhase.Began)) {
+                LoadBatch(count);
+            }
         }
     }
 
-    void LoadBatch() {
+    async void LoadBatch(int quantity) {
+
+        stopwatch.StartTime();
+        
         Profiler.BeginSample("LoadBatch");
-        for (int i = 0; i < count; i++)
+        var routines = new IEnumerator[quantity];
+        for (int i = 0; i < quantity; i++)
         {
             Profiler.BeginSample("DecodeMesh");
             DracoMeshLoader dracoLoader = new DracoMeshLoader();
             dracoLoader.onMeshesLoaded += OnMeshesLoaded;
-            StartCoroutine(dracoLoader.DecodeMesh(data));
+            routines[i] = dracoLoader.DecodeMesh(data);
             Profiler.EndSample();
         }
         Profiler.EndSample();
+        
+        while (true) {
+            var stillWorking = false;
+            foreach (var routine in routines) {
+                stillWorking |= routine.MoveNext();
+            }
+            if (!stillWorking) break;
+            await Task.Yield();
+        }
+
+        await Task.Yield();
+
+        stopwatch.StopTime();
+        Debug.Log($"Loaded {filePath} {quantity} times in {stopwatch.GetTextReport()}");
     }
 
     void OnMeshesLoaded( Mesh mesh ) {
