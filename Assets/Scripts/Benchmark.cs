@@ -25,6 +25,7 @@ using Unity.Collections;
 using System.IO;
 using System.Threading.Tasks;
 using GLTFast.Utils;
+using Draco;
 
 public class Benchmark : MonoBehaviour
 {
@@ -82,27 +83,22 @@ public class Benchmark : MonoBehaviour
 
         stopwatch.StartTime();
         
-        Profiler.BeginSample("LoadBatch");
-        var routines = new IEnumerator[quantity];
+        var tasks = new List<Task<Mesh>>(quantity);
+        
         for (int i = 0; i < quantity; i++)
         {
-            Profiler.BeginSample("DecodeMesh");
             DracoMeshLoader dracoLoader = new DracoMeshLoader();
-            dracoLoader.onMeshesLoaded += OnMeshesLoaded;
-            routines[i] = dracoLoader.DecodeMesh(data);
-            Profiler.EndSample();
-        }
-        Profiler.EndSample();
-        
-        while (true) {
-            var stillWorking = false;
-            foreach (var routine in routines) {
-                stillWorking |= routine.MoveNext();
-            }
-            if (!stillWorking) break;
-            await Task.Yield();
+            var task = dracoLoader.ConvertDracoMeshToUnity(data);
+            tasks.Add(task);
         }
 
+        while (tasks.Count > 0) {
+            var task = await Task.WhenAny(tasks);
+            tasks.Remove(task);
+            var mesh = await task;
+            ApplyMesh(mesh);
+        } 
+        
         await Task.Yield();
 
         stopwatch.StopTime();
