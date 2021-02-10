@@ -31,6 +31,9 @@ using Random = UnityEngine.Random;
 #if DRACO
 using Draco;
 #endif
+#if CORTO
+using Corto;
+#endif
 
 public class Benchmark : MonoBehaviour
 {
@@ -111,6 +114,11 @@ public class Benchmark : MonoBehaviour
                 await LoadBatchDraco(quantity);
                 break;
 #endif
+#if CORTO
+            case MeshType.Corto:
+                await LoadBatchCorto(quantity);
+                break;
+#endif
             default:
                 Debug.LogError("Unsupported mesh type. Install missing packages!");
                 stopwatch.StopTime();
@@ -160,6 +168,28 @@ public class Benchmark : MonoBehaviour
             ApplyMesh(mesh);
         }
 #endif
+    }
+#endif
+
+#if CORTO
+    async Task LoadBatchCorto(int quantity) {
+        var meshDataArray = Mesh.AllocateWritableMeshData(quantity);
+        var dataTasks = new List<Task<bool>>(quantity);
+        for (var i = 0; i < quantity; i++)
+        {
+            dataTasks.Add(LoadCortoMesh(meshDataArray[i]));
+        }
+        var meshes = CreateMeshes(quantity);
+        await Task.WhenAll(dataTasks);
+        Mesh.ApplyAndDisposeWritableMeshData(meshDataArray,meshes,CortoMeshLoader.defaultMeshUpdateFlags);
+        foreach (var mesh in meshes) {
+            ApplyMesh(mesh);
+        }
+    }
+
+    async Task<bool> LoadCortoMesh(Mesh.MeshData meshData) {
+        var c = new CortoMeshLoader();
+        return await c.DecodeMesh(data,meshData);
     }
 #endif
 
