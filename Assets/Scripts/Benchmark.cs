@@ -16,6 +16,7 @@
 #define LOCAL_LOADING
 #endif
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,10 +26,22 @@ using Unity.Collections;
 using System.IO;
 using System.Threading.Tasks;
 using GLTFast.Utils;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
+#if DRACO
 using Draco;
+#endif
 
 public class Benchmark : MonoBehaviour
 {
+    enum MeshType {
+        Draco,
+        Corto
+    }
+
+    [SerializeField]
+    MeshType meshType;
+
     [SerializeField]
     private string filePath = null;
 
@@ -63,6 +76,9 @@ public class Benchmark : MonoBehaviour
         // data = webRequest.downloadHandler.data;
         data = new NativeArray<byte>(webRequest.downloadHandler.data,Allocator.Persistent);
 
+        if (filePath.EndsWith(".crt")) {
+            meshType = MeshType.Corto;
+        }
         // LoadBatch();
     }
 
@@ -82,9 +98,28 @@ public class Benchmark : MonoBehaviour
     async void LoadBatch(int quantity) {
 
         stopwatch.StartTime();
-        
+
+        switch (meshType) {
+#if DRACO
+            case MeshType.Draco:
+                await LoadBatchDraco(quantity);
+                break;
+#endif
+            default:
+                Debug.LogError("Unsupported mesh type. Install missing packages!");
+                stopwatch.StopTime();
+                return;
+        }
+        await Task.Yield();
+        stopwatch.StopTime();
+        Debug.Log($"Loaded {filePath} {quantity} times in {stopwatch.GetTextReport()}");
+    }
+    
+#if DRACO
+    async Task LoadBatchDraco(int quantity) {
+
         var tasks = new List<Task<Mesh>>(quantity);
-        
+
         for (int i = 0; i < quantity; i++)
         {
             DracoMeshLoader dracoLoader = new DracoMeshLoader();
@@ -96,8 +131,16 @@ public class Benchmark : MonoBehaviour
             var task = await Task.WhenAny(tasks);
             tasks.Remove(task);
             var mesh = await task;
-            ApplyMesh(mesh);
-        } 
+            if (mesh == null) {
+                Debug.LogError("Nope");
+            }
+            else {
+                ApplyMesh(mesh);
+            }
+        }
+    }
+#endif
+
         
         await Task.Yield();
 
