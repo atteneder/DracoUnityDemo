@@ -46,6 +46,12 @@ public class Benchmark : MonoBehaviour
     private string filePath = null;
 
     [SerializeField]
+    private bool requireNormals = false;
+    
+    [SerializeField]
+    private bool requireTangents = false;
+    
+    [SerializeField]
     private int count = 10;
 
     [SerializeField]
@@ -123,7 +129,7 @@ public class Benchmark : MonoBehaviour
         for (int i = 0; i < quantity; i++)
         {
             DracoMeshLoader dracoLoader = new DracoMeshLoader();
-            var task = dracoLoader.ConvertDracoMeshToUnity(data);
+            var task = dracoLoader.ConvertDracoMeshToUnity(data,requireNormals,requireTangents);
             tasks.Add(task);
         }
 
