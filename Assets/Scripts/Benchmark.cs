@@ -123,34 +123,31 @@ public class Benchmark : MonoBehaviour
     
 #if DRACO
     async Task LoadBatchDraco(int quantity) {
-
-        var tasks = new List<Task<Mesh>>(quantity);
-
+        var meshDataArray = Mesh.AllocateWritableMeshData(quantity);
+        var tasks = new List<Task<bool>>(quantity);
         for (int i = 0; i < quantity; i++)
         {
             DracoMeshLoader dracoLoader = new DracoMeshLoader();
-            var task = dracoLoader.ConvertDracoMeshToUnity(data,requireNormals,requireTangents);
+            var task = dracoLoader.ConvertDracoMeshToUnity(meshDataArray[i],data,requireNormals,requireTangents);
             tasks.Add(task);
         }
-
-        while (tasks.Count > 0) {
-            var task = await Task.WhenAny(tasks);
-            tasks.Remove(task);
-            var mesh = await task;
-            if (mesh == null) {
-                Debug.LogError("Nope");
-            }
-            else {
-                ApplyMesh(mesh);
-            }
+        var meshes = CreateMeshes(quantity);
+        await Task.WhenAll(tasks);
+        Mesh.ApplyAndDisposeWritableMeshData(meshDataArray,meshes,CortoMeshLoader.defaultMeshUpdateFlags);
+        foreach (var mesh in meshes) {
+            ApplyMesh(mesh);
         }
     }
 #endif
-    
-    void OnMeshesLoaded( Mesh mesh ) {
-        ApplyMesh(mesh);
-    }
 
+    static Mesh[] CreateMeshes(int quantity) {
+        var meshes = new Mesh[quantity];
+        for (var index = 0; index < meshes.Length; index++) {
+            meshes[index] = new Mesh();
+        }
+        return meshes;
+    }
+    
     void ApplyMesh(Mesh mesh) {
         Profiler.BeginSample("ApplyMesh");
         if (mesh==null) return;
