@@ -84,7 +84,7 @@ public class Benchmark : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        if(data!=null) {
+        if(data.IsCreated) {
             if (Input.GetKeyDown(KeyCode.Alpha1)) {
                 LoadBatch(1);
             } else
@@ -180,6 +180,8 @@ public class Benchmark : MonoBehaviour
     }
 
     void OnDestroy() {
-        data.Dispose();
+        if (data.IsCreated) {
+            data.Dispose();
+        }
     }
 }
