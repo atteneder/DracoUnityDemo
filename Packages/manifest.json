@@ -5,6 +5,9 @@
     "com.unity.test-framework": "1.1.22",
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
+  "testables": [
+    "com.atteneder.draco"
+  ],
   "scopedRegistries": [
     {
       "name": "OpenUPM",
