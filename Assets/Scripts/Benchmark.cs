@@ -140,14 +140,7 @@ public class Benchmark : MonoBehaviour
         }
     }
 #endif
-
-        
-        await Task.Yield();
-
-        stopwatch.StopTime();
-        Debug.Log($"Loaded {filePath} {quantity} times in {stopwatch.GetTextReport()}");
-    }
-
+    
     void OnMeshesLoaded( Mesh mesh ) {
         ApplyMesh(mesh);
     }
