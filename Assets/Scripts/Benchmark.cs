@@ -125,7 +125,7 @@ public class Benchmark : MonoBehaviour
     async Task LoadBatchDraco(int quantity) {
 #if UNITY_2020_2_OR_NEWER
         var meshDataArray = Mesh.AllocateWritableMeshData(quantity);
-        var tasks = new List<Task<bool>>(quantity);
+        var tasks = new List<Task<DracoMeshLoader.DecodeResult>>(quantity);
 #else
         var tasks = new List<Task<Mesh>>(quantity);
 #endif
@@ -142,14 +142,24 @@ public class Benchmark : MonoBehaviour
         }
 #if UNITY_2020_2_OR_NEWER        
         var meshes = CreateMeshes(quantity);
-        await Task.WhenAll(tasks);
+        var results = await Task.WhenAll(tasks);
         Mesh.ApplyAndDisposeWritableMeshData(meshDataArray,meshes,CortoMeshLoader.defaultMeshUpdateFlags);
+        for (var i = 0; i < meshes.Length; i++) {
+            var mesh = meshes[i];
+            if (results[i].calculateNormals) {
+                mesh.RecalculateNormals();
+            }
+            if (requireTangents) {
+                mesh.RecalculateTangents();
+            }
+            ApplyMesh(mesh);
+        }
 #else
         var meshes = await Task.WhenAll(tasks);
-#endif
         foreach (var mesh in meshes) {
             ApplyMesh(mesh);
         }
+#endif
     }
 #endif
 
