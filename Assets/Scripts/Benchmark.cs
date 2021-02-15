@@ -146,7 +146,7 @@ public class Benchmark : MonoBehaviour
 #if UNITY_2020_2_OR_NEWER        
         var meshes = CreateMeshes(quantity);
         var results = await Task.WhenAll(tasks);
-        Mesh.ApplyAndDisposeWritableMeshData(meshDataArray,meshes,CortoMeshLoader.defaultMeshUpdateFlags);
+        Mesh.ApplyAndDisposeWritableMeshData(meshDataArray,meshes,DracoMeshLoader.defaultMeshUpdateFlags);
         for (var i = 0; i < meshes.Length; i++) {
             var mesh = meshes[i];
             if (results[i].calculateNormals) {
