@@ -52,6 +52,9 @@ public class Benchmark : MonoBehaviour
     private bool requireTangents = false;
     
     [SerializeField]
+    private bool convertSpace = true;
+    
+    [SerializeField]
     private int count = 10;
 
     [SerializeField]
@@ -131,7 +134,7 @@ public class Benchmark : MonoBehaviour
 #endif
         for (int i = 0; i < quantity; i++)
         {
-            DracoMeshLoader dracoLoader = new DracoMeshLoader();
+            DracoMeshLoader dracoLoader = new DracoMeshLoader(convertSpace);
             var task = dracoLoader.ConvertDracoMeshToUnity(
 #if UNITY_2020_2_OR_NEWER
                 meshDataArray[i],
