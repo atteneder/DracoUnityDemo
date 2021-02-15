@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 36748762}
   - component: {fileID: 36748765}
   - component: {fileID: 36748763}
+  - component: {fileID: 36748764}
   m_Layer: 0
   m_Name: Benchmark
   m_TagString: Untagged
@@ -169,11 +170,14 @@ MonoBehaviour:
   filePath: 10pct-draco-7.drc
   requireNormals: 0
   requireTangents: 0
+  convertSpace: 1
+  weightsId: -1
+  jointsId: -1
   count: 1
   prefab: {fileID: 6139649911139632697, guid: d9ec950d73efb466ab820f2cc79e9cdb, type: 3}
   spread: 0.5
   step: 0.02
---- !u!114 &36748765
+--- !u!114 &36748764
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -186,9 +190,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshType: 0
+  filePath: skinned.drc
+  requireNormals: 0
+  requireTangents: 0
+  convertSpace: 1
+  weightsId: 3
+  jointsId: 0
+  count: 200
+  prefab: {fileID: 6139649911139632697, guid: d9ec950d73efb466ab820f2cc79e9cdb, type: 3}
+  spread: 0.5
+  step: 0.02
+--- !u!114 &36748765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36748761}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 040c185aa251d4b8daf1440d25110f02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshType: 0
   filePath: bunny_norm.drc
   requireNormals: 0
   requireTangents: 0
+  convertSpace: 1
+  weightsId: -1
+  jointsId: -1
   count: 200
   prefab: {fileID: 6139649911139632697, guid: d9ec950d73efb466ab820f2cc79e9cdb, type: 3}
   spread: 0.5

@@ -55,6 +55,12 @@ public class Benchmark : MonoBehaviour
     private bool convertSpace = true;
     
     [SerializeField]
+    private int weightsId = -1;
+    
+    [SerializeField]
+    private int jointsId = -1;
+    
+    [SerializeField]
     private int count = 10;
 
     [SerializeField]
@@ -139,7 +145,7 @@ public class Benchmark : MonoBehaviour
 #if UNITY_2020_2_OR_NEWER
                 meshDataArray[i],
 #endif
-                data,requireNormals,requireTangents
+                data,requireNormals,requireTangents,weightsId,jointsId
                 );
             tasks.Add(task);
         }
