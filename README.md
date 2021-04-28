@@ -2,7 +2,7 @@
 
 Unity project that demonstrates how to use the [DracoUnity package](https://github.com/atteneder/DracoUnity).
 
-![Screenshot of loaded bunny meshes](https://github.com/atteneder/DracoUnityDemo/raw/master/Images/bunnies.png "Lots of Stanford bunny meshes loaded via DracoUnity")
+![Screenshot of loaded bunny meshes](https://github.com/atteneder/DracoUnityDemo/raw/main/Images/bunnies.png "Lots of Stanford bunny meshes loaded via DracoUnity")
 
 ## Support
 
