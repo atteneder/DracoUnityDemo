@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "Draco",
-        "Corto"
+        "Corto",
+        "Unity.Mathematics"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
