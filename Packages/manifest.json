@@ -1,9 +1,9 @@
 {
   "dependencies": {
-    "com.unity.burst": "1.4.4",
-    "com.atteneder.draco": "2.0.0-preview",
+    "com.atteneder.draco": "3.0.2",
+    "com.unity.burst": "1.5.4",
     "com.unity.performance.profile-analyzer": "1.0.3",
-    "com.unity.test-framework": "1.1.22",
+    "com.unity.test-framework": "1.1.24",
     "com.unity.modules.unitywebrequest": "1.0.0"
   },
   "testables": [
