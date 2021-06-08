@@ -70,7 +70,11 @@ public class Benchmark : MonoBehaviour
     [SerializeField]
     MeshFilter prefab = null;
 
+    [SerializeField]
+    bool fromNativeArray = true;
+    
     NativeArray<byte> data;
+    byte[] dataManaged;
 
     [SerializeField]
     float spread = .5f;
@@ -91,9 +95,9 @@ public class Benchmark : MonoBehaviour
             Debug.LogErrorFormat("Error loading {0}: {1}",url,webRequest.error);
             yield break;
         }
-
-        // data = webRequest.downloadHandler.data;
-        data = new NativeArray<byte>(webRequest.downloadHandler.data,Allocator.Persistent);
+        
+        dataManaged = webRequest.downloadHandler.data;
+        data = new NativeArray<byte>(dataManaged,Allocator.Persistent);
 
         if (filePath.EndsWith(".crt")) {
             meshType = MeshType.Corto;
@@ -145,12 +149,23 @@ public class Benchmark : MonoBehaviour
         for (int i = 0; i < quantity; i++)
         {
             DracoMeshLoader dracoLoader = new DracoMeshLoader(convertSpace);
-            var task = dracoLoader.ConvertDracoMeshToUnity(
+
+            Task<Mesh> task;
+            if (fromNativeArray) {
+                task = dracoLoader.ConvertDracoMeshToUnity(
+    #if DRACO_MESH_DATA
+                    meshDataArray[i],
+    #endif
+                    data,requireNormals,requireTangents,weightsId,jointsId
+                    );
+            } else {
+                task = dracoLoader.ConvertDracoMeshToUnity(
 #if DRACO_MESH_DATA
-                meshDataArray[i],
+                    meshDataArray[i],
 #endif
-                data,requireNormals,requireTangents,weightsId,jointsId
-                );
+                    dataManaged,requireNormals,requireTangents,weightsId,jointsId
+                );                
+            }
             tasks.Add(task);
         }
 #if DRACO_MESH_DATA        
