@@ -150,7 +150,11 @@ public class Benchmark : MonoBehaviour
         {
             DracoMeshLoader dracoLoader = new DracoMeshLoader(convertSpace);
 
+#if DRACO_MESH_DATA
+            Task<DracoMeshLoader.DecodeResult> task;
+#else
             Task<Mesh> task;
+#endif
             if (fromNativeArray) {
                 task = dracoLoader.ConvertDracoMeshToUnity(
     #if DRACO_MESH_DATA
@@ -174,6 +178,10 @@ public class Benchmark : MonoBehaviour
         Mesh.ApplyAndDisposeWritableMeshData(meshDataArray,meshes,DracoMeshLoader.defaultMeshUpdateFlags);
         for (var i = 0; i < meshes.Length; i++) {
             var mesh = meshes[i];
+            if (results[i].boneWeightData != null) {
+                results[i].boneWeightData.ApplyOnMesh(mesh);
+                results[i].boneWeightData.Dispose();
+            }
             if (results[i].calculateNormals) {
                 mesh.RecalculateNormals();
             }
