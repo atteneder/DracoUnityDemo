@@ -175,6 +175,13 @@ public class Benchmark : MonoBehaviour
 #if DRACO_MESH_DATA        
         var meshes = CreateMeshes(quantity);
         var results = await Task.WhenAll(tasks);
+        for (var i = 0; i < results.Length; i++) {
+            if (!results[i].success) {
+                Debug.LogError("Decoding failed!");
+                meshDataArray.Dispose();
+                return;
+            }
+        }
         Mesh.ApplyAndDisposeWritableMeshData(meshDataArray,meshes,DracoMeshLoader.defaultMeshUpdateFlags);
         for (var i = 0; i < meshes.Length; i++) {
             var mesh = meshes[i];
