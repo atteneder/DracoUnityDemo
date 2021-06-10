@@ -221,7 +221,7 @@ public class Benchmark : MonoBehaviour
         b.transform.position = new Vector3(
             (Random.value-.5f)* spread * aspectRatio,
             (Random.value-.5f)* spread,
-            distance
+            -distance
             );
         var m = b.GetComponent<Renderer>().material;
         m.color = Color.HSVToRGB(Random.value, .5f, 1.0f );
