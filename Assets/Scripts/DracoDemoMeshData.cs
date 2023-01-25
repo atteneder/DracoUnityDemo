@@ -13,10 +13,6 @@
 // limitations under the License.
 //
 
-#if UNITY_2020_2_OR_NEWER
-#define DRACO_MESH_DATA
-#endif
-
 using System.IO;
 using UnityEngine;
 using Draco;
@@ -30,7 +26,6 @@ public class DracoDemoMeshData : MonoBehaviour {
     public bool requireNormals;
     public bool requireTangents;
     
-#if DRACO_MESH_DATA
     async void Start() {
         
         // Load file into memory
@@ -78,9 +73,4 @@ public class DracoDemoMeshData : MonoBehaviour {
             GetComponent<MeshFilter>().mesh = mesh;
         }
     }
-#else
-    void Start() {
-        Debug.LogWarning("MeshDataArray not supported in this Unity version");
-    }
-#endif
 }

@@ -16,10 +16,6 @@
 #define LOCAL_LOADING
 #endif
 
-#if UNITY_2020_2_OR_NEWER
-#define DRACO_MESH_DATA
-#endif
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -140,39 +136,26 @@ public class Benchmark : MonoBehaviour
     
 #if DRACO
     async Task LoadBatchDraco(int quantity) {
-#if DRACO_MESH_DATA
         var meshDataArray = Mesh.AllocateWritableMeshData(quantity);
         var tasks = new List<Task<DracoMeshLoader.DecodeResult>>(quantity);
-#else
-        var tasks = new List<Task<Mesh>>(quantity);
-#endif
         for (int i = 0; i < quantity; i++)
         {
             DracoMeshLoader dracoLoader = new DracoMeshLoader(convertSpace);
 
-#if DRACO_MESH_DATA
             Task<DracoMeshLoader.DecodeResult> task;
-#else
-            Task<Mesh> task;
-#endif
             if (fromNativeArray) {
                 task = dracoLoader.ConvertDracoMeshToUnity(
-    #if DRACO_MESH_DATA
                     meshDataArray[i],
-    #endif
                     data,requireNormals,requireTangents,weightsId,jointsId
                     );
             } else {
                 task = dracoLoader.ConvertDracoMeshToUnity(
-#if DRACO_MESH_DATA
                     meshDataArray[i],
-#endif
                     dataManaged,requireNormals,requireTangents,weightsId,jointsId
                 );                
             }
             tasks.Add(task);
         }
-#if DRACO_MESH_DATA        
         var meshes = CreateMeshes(quantity);
         var results = await Task.WhenAll(tasks);
         for (var i = 0; i < results.Length; i++) {
@@ -197,12 +180,6 @@ public class Benchmark : MonoBehaviour
             }
             ApplyMesh(mesh);
         }
-#else
-        var meshes = await Task.WhenAll(tasks);
-        foreach (var mesh in meshes) {
-            ApplyMesh(mesh);
-        }
-#endif
     }
 #endif
 
