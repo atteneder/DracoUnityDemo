@@ -41,7 +41,9 @@ public class DracoDemo : MonoBehaviour {
         }
     }
 
+#pragma warning disable CS1998
     public static async Task<byte[]> LoadData(string filePath) {
+#pragma warning restore CS1998
         // Load file into memory
         var fullPath = Path.Combine(Application.streamingAssetsPath, filePath);
 
@@ -63,7 +65,11 @@ public class DracoDemo : MonoBehaviour {
         }
 
 #else
+#if NET_STANDARD_2_1
         data = await File.ReadAllBytesAsync(fullPath);
+#else
+        data = File.ReadAllBytes(fullPath);
+#endif
 #endif
         return data;
     }
