@@ -14,8 +14,10 @@
 //
 
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 using Draco;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
@@ -25,10 +27,9 @@ public class DracoDemo : MonoBehaviour {
 
     async void Start() {
         
-        // Load file into memory
-        var fullPath = Path.Combine(Application.streamingAssetsPath, filePath);
-        var data = File.ReadAllBytes(fullPath);
-        
+        var data = await LoadData(filePath);
+        if (data == null) return;
+
         // Convert data to Unity mesh
         var draco = new DracoMeshLoader();
         // Async decoding has to start on the main thread and spawns multiple C# jobs.
@@ -38,5 +39,32 @@ public class DracoDemo : MonoBehaviour {
             // Use the resulting mesh
             GetComponent<MeshFilter>().mesh= mesh;
         }
+    }
+
+    public static async Task<byte[]> LoadData(string filePath) {
+        // Load file into memory
+        var fullPath = Path.Combine(Application.streamingAssetsPath, filePath);
+
+        byte[] data = null;
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+        // fullPath = $"file://{fullPath}";
+        using var request = UnityWebRequest.Get(fullPath);
+        request.SendWebRequest();
+        while (!request.isDone) {
+            await Task.Yield();
+        }
+
+        if (request.result == UnityWebRequest.Result.Success) {
+            data = request.downloadHandler.data;
+        }
+        else {
+            Debug.LogError($"Download failed {request.result}: {request.error} (URI: {fullPath})");
+        }
+
+#else
+        data = await File.ReadAllBytesAsync(fullPath);
+#endif
+        return data;
     }
 }

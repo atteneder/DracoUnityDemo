@@ -28,10 +28,9 @@ public class DracoDemoMeshData : MonoBehaviour {
     
     async void Start() {
         
-        // Load file into memory
-        var fullPath = Path.Combine(Application.streamingAssetsPath, filePath);
-        var data = File.ReadAllBytes(fullPath);
-        
+        var data = await DracoDemo.LoadData(filePath);
+        if (data == null) return;
+
         // Convert data to Unity mesh
         var draco = new DracoMeshLoader();
 
