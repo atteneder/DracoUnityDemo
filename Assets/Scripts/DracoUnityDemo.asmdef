@@ -3,6 +3,7 @@
     "rootNamespace": "",
     "references": [
         "Draco",
+        "DracoEncoder",
         "Corto",
         "Unity.Mathematics"
     ],
