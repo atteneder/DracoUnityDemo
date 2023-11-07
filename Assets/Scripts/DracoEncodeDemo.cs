@@ -1,7 +1,13 @@
 // SPDX-FileCopyrightText: 2023 Unity Technologies and the Draco for Unity authors
 // SPDX-License-Identifier: Apache-2.0
 
+#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL || UNITY_IOS || UNITY_ANDROID || UNITY_WSA || PLATFORM_LUMIN
+#define DRACO_PLATFORM_SUPPORTED
+#endif
+
+#if DRACO_PLATFORM_SUPPORTED
 #define DRACO_ENCODER
+#endif
 
 using System.Collections;
 

@@ -12,6 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL || UNITY_IOS || UNITY_ANDROID || UNITY_WSA || PLATFORM_LUMIN
+#define DRACO_PLATFORM_SUPPORTED
+#endif
+
 #if !(UNITY_ANDROID || UNITY_WEBGL) || UNITY_EDITOR
 #define LOCAL_LOADING
 #endif
@@ -28,7 +32,7 @@ using System.Threading.Tasks;
 using GLTFast.Utils;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
-#if DRACO
+#if DRACO && DRACO_PLATFORM_SUPPORTED
 using Draco;
 #endif
 
@@ -121,7 +125,13 @@ public class Benchmark : MonoBehaviour
         switch (meshType) {
 #if DRACO
             case MeshType.Draco:
+#if DRACO_PLATFORM_SUPPORTED
                 await LoadBatchDraco(quantity);
+#else
+                Debug.LogError("Platform not supported by Draco!");
+                stopwatch.StopTime();
+                return;
+#endif
                 break;
 #endif
             default:
@@ -134,7 +144,7 @@ public class Benchmark : MonoBehaviour
         Debug.Log($"Loaded {filePath} {quantity} times in {stopwatch.GetTextReport()}");
     }
     
-#if DRACO
+#if DRACO && DRACO_PLATFORM_SUPPORTED
     async Task LoadBatchDraco(int quantity) {
         var meshDataArray = Mesh.AllocateWritableMeshData(quantity);
         var tasks = new List<Task<DracoMeshLoader.DecodeResult>>(quantity);

@@ -13,9 +13,16 @@
 // limitations under the License.
 //
 
+#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL || UNITY_IOS || UNITY_ANDROID || UNITY_WSA || PLATFORM_LUMIN
+#define DRACO_PLATFORM_SUPPORTED
+#endif
+
 using System.IO;
+
 using UnityEngine;
+#if DRACO_PLATFORM_SUPPORTED
 using Draco;
+#endif
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
@@ -26,6 +33,7 @@ public class DracoDemoMeshData : MonoBehaviour {
     public bool requireNormals;
     public bool requireTangents;
     
+#if DRACO_PLATFORM_SUPPORTED
     async void Start() {
         
         var data = await DracoDemo.LoadData(filePath);
@@ -72,4 +80,10 @@ public class DracoDemoMeshData : MonoBehaviour {
             GetComponent<MeshFilter>().mesh = mesh;
         }
     }
+#else // DRACO_PLATFORM_SUPPORTED
+    void Start()
+    {
+        Debug.LogError("Draco is not supported on this platform.");
+    }
+#endif // DRACO_PLATFORM_SUPPORTED
 }
