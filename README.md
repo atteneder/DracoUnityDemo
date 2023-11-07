@@ -14,7 +14,7 @@ Like this demo? You can show your appreciation and ...
 
 Copyright (c) 2019 Andreas Atteneder, All Rights Reserved.
 
-### Source code 
+### Source code
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use files in this repository except in compliance with the License.

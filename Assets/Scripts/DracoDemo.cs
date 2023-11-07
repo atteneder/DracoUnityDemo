@@ -1,4 +1,4 @@
-﻿// Copyright 2017 The Draco Authors.
+// Copyright 2017 The Draco Authors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,13 +28,14 @@ using UnityEngine.Networking;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
-public class DracoDemo : MonoBehaviour {
-    
+public class DracoDemo : MonoBehaviour
+{
+
     public string filePath;
 
 #if DRACO_PLATFORM_SUPPORTED
     async void Start() {
-        
+
         var data = await LoadData(filePath);
         if (data == null) return;
 
@@ -42,7 +43,7 @@ public class DracoDemo : MonoBehaviour {
         var draco = new DracoMeshLoader();
         // Async decoding has to start on the main thread and spawns multiple C# jobs.
         var mesh = await draco.ConvertDracoMeshToUnity(data);
-        
+
         if (mesh != null)
         {
             FixPointCloudIndices(mesh);

@@ -8,7 +8,7 @@ public static class WebglPlayerSettings
     {
         PlayerSettings.WebGL.threadsSupport = true;
     }
-    
+
     [MenuItem("Tools/Unset WebGL Settings")]
     static void WebglUnSet()
     {
