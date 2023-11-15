@@ -59,8 +59,7 @@ public class DracoDemo : MonoBehaviour
 
         byte[] data = null;
 
-#if UNITY_WEBGL && !UNITY_EDITOR
-        // fullPath = $"file://{fullPath}";
+#if (UNITY_WEBGL || UNITY_ANDROID) && !UNITY_EDITOR
         using var request = UnityWebRequest.Get(fullPath);
         request.SendWebRequest();
         while (!request.isDone) {
