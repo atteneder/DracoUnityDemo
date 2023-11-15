@@ -46,31 +46,8 @@ public class DracoDemo : MonoBehaviour
 
         if (mesh != null)
         {
-            FixPointCloudIndices(mesh);
-
             // Use the resulting mesh
             GetComponent<MeshFilter>().mesh= mesh;
-        }
-    }
-
-    /// <summary>
-    /// Creates progressive indices for points meshes.
-    /// TODO: This should be resolved by DracoUnity at some point
-    /// </summary>
-    /// <seealso href="https://github.com/atteneder/DracoUnity/issues/64"/>
-    /// <param name="mesh"></param>
-    static void FixPointCloudIndices(Mesh mesh)
-    {
-        if (mesh.GetTopology(0) == MeshTopology.Points)
-        {
-            var indices = new NativeArray<int>(mesh.vertexCount, Allocator.Temp);
-            for (var i = 0; i < indices.Length; i++)
-            {
-                indices[i] = i;
-            }
-
-            mesh.SetIndices(indices, MeshTopology.Points, 0);
-            indices.Dispose();
         }
     }
 
