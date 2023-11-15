@@ -13,7 +13,7 @@ using System.Collections;
 
 using UnityEngine;
 #if DRACO_ENCODER
-using Draco.Encoder;
+using Draco.Encode;
 using UnityEngine.Rendering;
 #endif
 
