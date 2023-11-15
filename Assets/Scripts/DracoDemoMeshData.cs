@@ -60,6 +60,8 @@ public class DracoDemoMeshData : MonoBehaviour
             var mesh = new Mesh();
             Mesh.ApplyAndDisposeWritableMeshData(meshDataArray,mesh);
 
+            mesh.bounds = result.bounds;
+
             // If Draco mesh has bone weigths, apply them now.
             // To get these, you have to supply the correct attribute IDs
             // to `ConvertDracoMeshToUnity` above (optional paramters).
