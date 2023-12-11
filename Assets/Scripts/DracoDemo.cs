@@ -39,10 +39,8 @@ public class DracoDemo : MonoBehaviour
         var data = await LoadData(filePath);
         if (data == null) return;
 
-        // Convert data to Unity mesh
-        var draco = new DracoMeshLoader();
         // Async decoding has to start on the main thread and spawns multiple C# jobs.
-        var mesh = await draco.ConvertDracoMeshToUnity(data);
+        var mesh = await DracoDecoder.DecodeMesh(data);
 
         if (mesh != null)
         {

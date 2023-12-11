@@ -40,18 +40,15 @@ public class DracoDemoMeshData : MonoBehaviour
         var data = await DracoDemo.LoadData(filePath);
         if (data == null) return;
 
-        // Convert data to Unity mesh
-        var draco = new DracoMeshLoader();
-
         // Allocate single mesh data (you can/should bulk allocate multiple at once, if you're loading multiple draco meshes)
         var meshDataArray = Mesh.AllocateWritableMeshData(1);
 
         // Async decoding has to start on the main thread and spawns multiple C# jobs.
-        var result = await draco.ConvertDracoMeshToUnity(
+        var result = await DracoDecoder.DecodeMesh(
             meshDataArray[0],
             data,
-            requireNormals, // Set to true if you require normals. If Draco data does not contain them, they are allocated and we have to calculate them below
-            requireTangents // Retrieve tangents is not supported, but this will ensure they are allocated and can be calculated later (see below)
+            requireNormals:requireNormals, // Set to true if you require normals. If Draco data does not contain them, they are allocated and we have to calculate them below
+            requireTangents:requireTangents // Retrieve tangents is not supported, but this will ensure they are allocated and can be calculated later (see below)
             );
 
         if (result.success) {
@@ -60,11 +57,11 @@ public class DracoDemoMeshData : MonoBehaviour
             var mesh = new Mesh();
             Mesh.ApplyAndDisposeWritableMeshData(meshDataArray,mesh);
 
-            mesh.bounds = result.bounds;
+            // mesh.bounds = result.bounds;
 
-            // If Draco mesh has bone weigths, apply them now.
+            // If Draco mesh has bone weights, apply them now.
             // To get these, you have to supply the correct attribute IDs
-            // to `ConvertDracoMeshToUnity` above (optional paramters).
+            // to `ConvertDracoMeshToUnity` above (optional parameters).
             if (result.boneWeightData != null) {
                 result.boneWeightData.ApplyOnMesh(mesh);
                 result.boneWeightData.Dispose();

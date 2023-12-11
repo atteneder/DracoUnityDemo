@@ -158,21 +158,19 @@ public class Benchmark : MonoBehaviour
 #if DRACO && DRACO_PLATFORM_SUPPORTED
     async Task LoadBatchDraco(int quantity) {
         var meshDataArray = Mesh.AllocateWritableMeshData(quantity);
-        var tasks = new List<Task<DracoMeshLoader.DecodeResult>>(quantity);
+        var tasks = new List<Task<DecodeResult>>(quantity);
         for (int i = 0; i < quantity; i++)
         {
-            DracoMeshLoader dracoLoader = new DracoMeshLoader(convertSpace);
-
-            Task<DracoMeshLoader.DecodeResult> task;
+            Task<DecodeResult> task;
             if (fromNativeArray) {
-                task = dracoLoader.ConvertDracoMeshToUnity(
+                task = DracoDecoder.DecodeMesh(
                     meshDataArray[i],
-                    data,requireNormals,requireTangents,weightsId,jointsId
+                    data,convertSpace,requireNormals,requireTangents,weightsId,jointsId
                     );
             } else {
-                task = dracoLoader.ConvertDracoMeshToUnity(
+                task = DracoDecoder.DecodeMesh(
                     meshDataArray[i],
-                    dataManaged,requireNormals,requireTangents,weightsId,jointsId
+                    dataManaged,convertSpace,requireNormals,requireTangents,weightsId,jointsId
                 );
             }
             tasks.Add(task);
@@ -186,7 +184,8 @@ public class Benchmark : MonoBehaviour
                 return;
             }
         }
-        Mesh.ApplyAndDisposeWritableMeshData(meshDataArray,meshes,DracoMeshLoader.defaultMeshUpdateFlags);
+
+        Mesh.ApplyAndDisposeWritableMeshData(meshDataArray,meshes,DracoDecoder.defaultMeshUpdateFlags);
         for (var i = 0; i < meshes.Length; i++) {
             var mesh = meshes[i];
             if (results[i].boneWeightData != null) {
