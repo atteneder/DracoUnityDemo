@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL || UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS || UNITY_ANDROID || UNITY_WSA || PLATFORM_LUMIN
+#if UNITY_STANDALONE || UNITY_WEBGL || UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS || UNITY_ANDROID || UNITY_WSA || PLATFORM_LUMIN
 #define DRACO_PLATFORM_SUPPORTED
 #endif
 
@@ -161,18 +161,14 @@ public class Benchmark : MonoBehaviour
         var tasks = new List<Task<DecodeResult>>(quantity);
         for (int i = 0; i < quantity; i++)
         {
+            var decodeFlags = requireNormals ? DecodeSettings.RequireNormals : 0;
+            decodeFlags |= requireTangents ? DecodeSettings.RequireTangents : 0;
+            decodeFlags |= convertSpace ? DecodeSettings.ConvertSpace : 0;
             Task<DecodeResult> task;
-            if (fromNativeArray) {
-                task = DracoDecoder.DecodeMesh(
-                    meshDataArray[i],
-                    data,convertSpace,requireNormals,requireTangents,weightsId,jointsId
-                    );
-            } else {
-                task = DracoDecoder.DecodeMesh(
-                    meshDataArray[i],
-                    dataManaged,convertSpace,requireNormals,requireTangents,weightsId,jointsId
-                );
-            }
+            var attributeIdMap = DracoDecoder.CreateAttributeIdMap(weightsId, jointsId); 
+            task = fromNativeArray 
+                ? DracoDecoder.DecodeMesh(meshDataArray[i], data,decodeFlags, attributeIdMap)
+                : DracoDecoder.DecodeMesh(meshDataArray[i], dataManaged, decodeFlags,attributeIdMap);
             tasks.Add(task);
         }
         var meshes = CreateMeshes(quantity);

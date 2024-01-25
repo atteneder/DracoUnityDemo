@@ -1,27 +1,10 @@
 {
   "dependencies": {
-    "com.atteneder.draco": "3.3.2",
-    "com.unity.ide.rider": "3.0.26",
-    "com.unity.mathematics": "1.2.6",
+    "com.unity.cloud.draco": "5.0.1",
+    "com.unity.cloud.draco.webgl-2020": "1.0.0",
+    "com.unity.ide.rider": "3.0.27",
     "com.unity.performance.profile-analyzer": "1.2.2",
-    "com.unity.test-framework": "1.1.33",
+    "com.unity.test-framework": "1.3.9",
     "com.unity.modules.unitywebrequest": "1.0.0"
-  },
-  "testables": [
-    "com.atteneder.draco",
-    "com.unity.cloud.draco",
-    "com.unity.cloud.draco.webgl-2020",
-    "com.unity.cloud.draco.webgl-2021",
-    "com.unity.cloud.draco.webgl-2022",
-    "com.unity.cloud.draco.webgl-2023"
-  ],
-  "scopedRegistries": [
-    {
-      "name": "OpenUPM",
-      "url": "https://package.openupm.com",
-      "scopes": [
-        "com.atteneder"
-      ]
-    }
-  ]
+  }
 }

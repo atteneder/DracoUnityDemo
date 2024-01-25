@@ -13,7 +13,7 @@
 // limitations under the License.
 //
 
-#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL || UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS || UNITY_ANDROID || UNITY_WSA || PLATFORM_LUMIN
+#if UNITY_STANDALONE || UNITY_WEBGL || UNITY_IOS || UNITY_TVOS || UNITY_VISIONOS || UNITY_ANDROID || UNITY_WSA || PLATFORM_LUMIN
 #define DRACO_PLATFORM_SUPPORTED
 #endif
 
@@ -43,12 +43,16 @@ public class DracoDemoMeshData : MonoBehaviour
         // Allocate single mesh data (you can/should bulk allocate multiple at once, if you're loading multiple draco meshes)
         var meshDataArray = Mesh.AllocateWritableMeshData(1);
 
+        // Set to true if you require normals. If Draco data does not contain them, they are allocated and we have to calculate them below
+        var decodeFlags = requireNormals ? DecodeSettings.RequireNormals : 0;
+        // Retrieve tangents is not supported, but this will ensure they are allocated and can be calculated later (see below)
+        decodeFlags |= requireTangents ? DecodeSettings.RequireTangents : 0;
+        
         // Async decoding has to start on the main thread and spawns multiple C# jobs.
         var result = await DracoDecoder.DecodeMesh(
             meshDataArray[0],
             data,
-            requireNormals:requireNormals, // Set to true if you require normals. If Draco data does not contain them, they are allocated and we have to calculate them below
-            requireTangents:requireTangents // Retrieve tangents is not supported, but this will ensure they are allocated and can be calculated later (see below)
+            decodeFlags
             );
 
         if (result.success) {
