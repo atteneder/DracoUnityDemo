@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.unity.cloud.draco": "5.0.1",
+    "com.unity.cloud.draco": "5.0.2",
     "com.unity.cloud.draco.webgl-2020": "1.0.0",
     "com.unity.ide.rider": "3.0.27",
     "com.unity.performance.profile-analyzer": "1.2.2",

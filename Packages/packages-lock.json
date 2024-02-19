@@ -10,7 +10,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.cloud.draco": {
-      "version": "5.0.1",
+      "version": "5.0.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
