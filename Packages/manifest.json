@@ -1,10 +1,12 @@
 {
   "dependencies": {
     "com.unity.cloud.draco": "5.0.2",
-    "com.unity.cloud.draco.webgl-2020": "1.0.0",
     "com.unity.ide.rider": "3.0.28",
     "com.unity.performance.profile-analyzer": "1.2.2",
     "com.unity.test-framework": "1.3.9",
     "com.unity.modules.unitywebrequest": "1.0.0"
-  }
+  },
+  "testables": [
+    "com.unity.cloud.draco"
+  ]
 }
